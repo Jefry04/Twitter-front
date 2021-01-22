@@ -45,7 +45,7 @@ export default function ButtonAppBar() {
           <ListItem component={NavLink} to="/login">
             <Button className={classes.title}>Login</Button>
           </ListItem>
-          <ListItem component={NavLink} to="/login">
+          <ListItem component={NavLink} to="/CreateUsers">
             <Button className={classes.title}>Sign UP</Button>
           </ListItem>
         </Toolbar>

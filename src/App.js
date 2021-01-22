@@ -10,7 +10,7 @@ import {
 } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
-
+import CreateUsers from './pages/CreateUsers';
 function App() {
   return (
     <Router>
@@ -19,6 +19,7 @@ function App() {
       <Container maxWidth="sm">
         <Switch>
           <Route path="/login" component={Login} />
+          <Route path="/CreateUsers" component={CreateUsers} />
           <Route path="/" component={Home} />
           <Redirect to="/" />
         </Switch>
