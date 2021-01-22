@@ -1,3 +1,5 @@
+import * as Auth from '../utils/auth';
+
 const BASE_API_URL = process.env.REACT_APP_BASE_API_URL;
 
 export function login({ username = '', password = '' }) {
@@ -20,7 +22,7 @@ export function login({ username = '', password = '' }) {
       if (success) {
         const [item = {}] = items;
         const { token = '', user = {} } = item;
-        localStorage.setItem('token', token);
+        Auth.setToken({ token });
         return Promise.resolve(user);
       } else {
         const { message = '' } = data;
