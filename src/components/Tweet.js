@@ -14,11 +14,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Tweet({ content = '', date = '', user = {} }) {
+export default function Tweet({
+  id = '',
+  content = '',
+  date = '',
+  user = {},
+  onSelected,
+}) {
   const classes = useStyles();
 
+  function handleClick(e) {
+    onSelected && onSelected(e, id);
+  }
+
   return (
-    <Card className={classes.root}>
+    <Card className={classes.root} onClick={handleClick}>
       <CardHeader
         avatar={<Avatar>R</Avatar>}
         action={

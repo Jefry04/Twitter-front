@@ -17,3 +17,11 @@ export function getTweets() {
       }
     });
 }
+export function getTweet({ id }) {
+  return fetch(`${BASE_API_URL}/tweets/${id}`)
+    .then((response) => response.json())
+    .then((response) => {
+      const { items: [data = {}] = [] } = response;
+      return data;
+    });
+}
