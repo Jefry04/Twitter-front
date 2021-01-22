@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import NavBar from './containers/NavBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
@@ -8,10 +8,10 @@ import {
   Route,
   Redirect,
 } from 'react-router-dom';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import CreateUsers from './pages/CreateUsers';
-import SingleTweet from './pages/SingleTweet';
+const Home = React.lazy(() => import('./pages/Home'));
+const Login = React.lazy(() => import('./pages/Login'));
+const SingleTweet = React.lazy(() => import('./pages/SingleTweet'));
+const CreateUsers = React.lazy(() => import('./pages/CreateUsers'));
 
 function App() {
   return (
@@ -19,13 +19,15 @@ function App() {
       <CssBaseline />
       <NavBar />
       <Container maxWidth="sm">
-        <Switch>
-          <Route path="/login" component={Login} />
-          <Route path="/tweets/:id" component={SingleTweet} />
-          <Route path="/CreateUsers" component={CreateUsers} />
-          <Route path="/" component={Home} />
-          <Redirect to="/" />
-        </Switch>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Switch>
+            <Route path="/login" component={Login} />
+            <Route path="/tweets/:id" component={SingleTweet} />
+            <Route path="/CreateUsers" component={CreateUsers} />
+            <Route path="/" component={Home} />
+            <Redirect to="/" />
+          </Switch>
+        </Suspense>
       </Container>
     </Router>
   );
