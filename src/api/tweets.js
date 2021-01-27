@@ -1,10 +1,11 @@
 import axios from 'axios';
+import { formatDistance } from 'date-fns';
 import * as Auth from '../utils/auth';
 const BASE_API_URL = process.env.REACT_APP_BASE_API_URL;
 
 function transformTweet(item) {
   const { _id, createdAt = '' } = item;
-  const date = new Date(createdAt).toDateString();
+  const date = formatDistance(new Date(createdAt), new Date());
 
   return {
     id: _id,
