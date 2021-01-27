@@ -2,6 +2,21 @@ import axios from 'axios';
 import * as Auth from '../utils/auth';
 const BASE_API_URL = process.env.REACT_APP_BASE_API_URL;
 
+function transformTweet(item) {
+  const { _id, createdAt = '' } = item;
+  const date = new Date(createdAt).toDateString();
+
+  return {
+    id: _id,
+    date,
+    ...item,
+  };
+}
+
+function transformTweets(items) {
+  return items.map(transformTweet);
+}
+
 export function getTweets() {
   return axios.get(`${BASE_API_URL}/tweets`).then((response) => {
     const { data = {} } = response;
@@ -9,7 +24,7 @@ export function getTweets() {
     const { success, items = [] } = data;
     const [item = {}] = items;
     const { tweets = [] } = item;
-    const payload = tweets;
+    const payload = transformTweets(tweets);
 
     if (success) {
       return Promise.resolve(payload);
@@ -24,7 +39,7 @@ export function getTweet({ id }) {
     const { data = {} } = response;
 
     const { success, items: [item = {}] = [] } = data;
-    const payload = item;
+    const payload = transformTweet(item);
 
     if (success) {
       return Promise.resolve(payload);

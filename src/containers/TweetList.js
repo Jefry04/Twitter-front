@@ -34,18 +34,7 @@ function TweetList() {
   return (
     <div>
       {list.map((item) => {
-        const { _id, content = '', user = {}, createdAt = '' } = item;
-        const date = new Date(createdAt).toDateString();
-        return (
-          <Tweet
-            key={_id}
-            id={_id}
-            content={content}
-            user={user}
-            date={date}
-            onSelected={onSelected}
-          />
-        );
+        return <Tweet key={item.id} onSelected={onSelected} {...item} />;
       })}
     </div>
   );
