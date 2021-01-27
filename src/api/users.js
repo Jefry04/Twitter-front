@@ -1,29 +1,24 @@
+import axios from 'axios';
 import * as Auth from '../utils/auth';
 
 const BASE_API_URL = process.env.REACT_APP_BASE_API_URL;
 
 export function login({ username = '', password = '' }) {
-  return fetch(`${BASE_API_URL}/users/login`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
+  return axios
+    .post(`${BASE_API_URL}/users/login`, {
       username,
       password,
-    }),
-  })
-    .then((response) => {
-      return response.json();
     })
-    .then((data) => {
+    .then((response) => {
+      const { data = {} } = response;
       const { success, items = [] } = data;
+      const [item = {}] = items;
+      const { token = '', user = {} } = item;
+      Auth.setToken({ token });
+      const payload = user;
 
       if (success) {
-        const [item = {}] = items;
-        const { token = '', user = {} } = item;
-        Auth.setToken({ token });
-        return Promise.resolve(user);
+        return Promise.resolve(payload);
       } else {
         const { message = '' } = data;
 
@@ -39,45 +34,24 @@ export function createUsers({
   password = '',
   passwordConfirmation = '',
 }) {
-  return fetch(`${BASE_API_URL}/users`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
+  return axios
+    .post(`${BASE_API_URL}/users`, {
       name,
       username,
       email,
       password,
       passwordConfirmation,
-    }),
-  })
-    .then((response) => {
-      return response.json();
     })
-    .then((data) => {
-      const { success, items = [] } = data;
+    .then((response) => {
+      const { data = {} } = response;
+      const { success } = data;
+      const payload = {};
 
       if (success) {
-        const [item = {}] = items;
-        const {
-          name = '',
-          username = '',
-          email = '',
-          password = '',
-          passwordConfirmation = '',
-        } = item;
-
-        return Promise.resolve(
-          name,
-          username,
-          email,
-          password,
-          passwordConfirmation
-        );
+        return Promise.resolve();
+        return Promise.resolve(payload);
       } else {
         const { message = '' } = data;
-
         return Promise.reject(message);
       }
     });

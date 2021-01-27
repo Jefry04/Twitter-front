@@ -1,53 +1,62 @@
+import axios from 'axios';
 import * as Auth from '../utils/auth';
 const BASE_API_URL = process.env.REACT_APP_BASE_API_URL;
 
 export function getTweets() {
-  return fetch(`${BASE_API_URL}/tweets`)
-    .then((response) => {
-      return response.json();
-    })
-    .then((data) => {
-      const { success, items = [] } = data;
-      const [item = {}] = items;
-      const { tweets = [] } = item;
-      if (success) {
-        return Promise.resolve(tweets);
-      } else {
-        const { message = '' } = data;
-        return Promise.reject(message);
-      }
-    });
+  return axios.get(`${BASE_API_URL}/tweets`).then((response) => {
+    const { data = {} } = response;
+
+    const { success, items = [] } = data;
+    const [item = {}] = items;
+    const { tweets = [] } = item;
+    const payload = tweets;
+
+    if (success) {
+      return Promise.resolve(payload);
+    } else {
+      const { message = '' } = data;
+      return Promise.reject(message);
+    }
+  });
 }
 export function getTweet({ id }) {
-  return fetch(`${BASE_API_URL}/tweets/${id}`)
-    .then((response) => response.json())
-    .then((response) => {
-      const { items: [data = {}] = [] } = response;
-      return data;
-    });
+  return axios.get(`${BASE_API_URL}/tweets/${id}`).then((response) => {
+    const { data = {} } = response;
+
+    const { success, items: [item = {}] = [] } = data;
+    const payload = item;
+
+    if (success) {
+      return Promise.resolve(payload);
+    } else {
+      const { message = '' } = data;
+      return Promise.reject(message);
+    }
+  });
 }
 
 export function newTweet({ content = '' }) {
   const token = Auth.getToken();
 
-  return fetch(`${BASE_API_URL}/tweets`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-access-token': token,
-    },
-    body: JSON.stringify({
-      content,
-    }),
-  })
+  return axios
+    .post(
+      `${BASE_API_URL}/tweets`,
+      {
+        content,
+      },
+      {
+        headers: {
+          'x-access-token': token,
+        },
+      }
+    )
     .then((response) => {
-      return response.json();
-    })
-    .then((data) => {
+      const { data = {} } = response;
       const { success } = data;
+      const payload = {};
 
       if (success) {
-        return Promise.resolve();
+        return Promise.resolve(payload);
       } else {
         const { message = '' } = data;
 
