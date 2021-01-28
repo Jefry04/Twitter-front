@@ -1,8 +1,6 @@
 import http from './http';
 import * as Auth from '../utils/auth';
 
-const BASE_API_URL = process.env.REACT_APP_BASE_API_URL;
-
 export function login({ username = '', password = '' }) {
   return http
     .post('/users/login', {
@@ -11,19 +9,13 @@ export function login({ username = '', password = '' }) {
     })
     .then((response) => {
       const { data = {} } = response;
-      const { success, items = [] } = data;
+      const { items = [] } = data;
       const [item = {}] = items;
       const { token = '', user = {} } = item;
       Auth.setToken({ token });
       const payload = user;
 
-      if (success) {
-        return Promise.resolve(payload);
-      } else {
-        const { message = '' } = data;
-
-        return Promise.reject(message);
-      }
+      return payload;
     });
 }
 
@@ -34,25 +26,11 @@ export function createUsers({
   password = '',
   passwordConfirmation = '',
 }) {
-  return http
-    .post('/users', {
-      name,
-      username,
-      email,
-      password,
-      passwordConfirmation,
-    })
-    .then((response) => {
-      const { data = {} } = response;
-      const { success } = data;
-      const payload = {};
-
-      if (success) {
-        return Promise.resolve();
-        return Promise.resolve(payload);
-      } else {
-        const { message = '' } = data;
-        return Promise.reject(message);
-      }
-    });
+  return http.post('/users', {
+    name,
+    username,
+    email,
+    password,
+    passwordConfirmation,
+  });
 }

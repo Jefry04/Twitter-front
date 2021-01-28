@@ -21,61 +21,35 @@ export function getTweets() {
   return http.get('/tweets').then((response) => {
     const { data = {} } = response;
 
-    const { success, items = [] } = data;
+    const { items = [] } = data;
     const [item = {}] = items;
     const { tweets = [] } = item;
     const payload = transformTweets(tweets);
 
-    if (success) {
-      return Promise.resolve(payload);
-    } else {
-      const { message = '' } = data;
-      return Promise.reject(message);
-    }
+    return payload;
   });
 }
 export function getTweet({ id }) {
   return http.get(`/tweets/${id}`).then((response) => {
     const { data = {} } = response;
 
-    const { success, items: [item = {}] = [] } = data;
+    const { items: [item = {}] = [] } = data;
     const payload = transformTweet(item);
 
-    if (success) {
-      return Promise.resolve(payload);
-    } else {
-      const { message = '' } = data;
-      return Promise.reject(message);
-    }
+    return payload;
   });
 }
 
 export function newTweet({ content = '' }) {
-  const token = Auth.getToken();
-
-  return http
-    .post(
-      'tweets',
-      {
-        content,
+  return http.post(
+    'tweets',
+    {
+      content,
+    },
+    {
+      headers: {
+        'x-access-token': Auth.getToken(),
       },
-      {
-        headers: {
-          'x-access-token': token,
-        },
-      }
-    )
-    .then((response) => {
-      const { data = {} } = response;
-      const { success } = data;
-      const payload = {};
-
-      if (success) {
-        return Promise.resolve(payload);
-      } else {
-        const { message = '' } = data;
-
-        return Promise.reject(message);
-      }
-    });
+    }
+  );
 }
