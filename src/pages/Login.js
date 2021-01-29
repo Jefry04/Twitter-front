@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import API from '../api';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
+import UserContext from '../containers/UserContext';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -16,15 +17,17 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Login({ history }) {
   const classes = useStyles();
+  const context = useContext(UserContext);
 
   async function submit(e) {
     e.preventDefault();
     const { username, password } = e.target.elements;
     try {
-      await API.login({
+      const user = await API.login({
         username: username.value,
         password: password.value,
       });
+      context.setUser(user);
       history.push('/');
     } catch (error) {
       console.error(error);
