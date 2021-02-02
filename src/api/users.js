@@ -8,6 +8,7 @@ export function login({ username = '', password = '' }) {
       password,
     })
     .then((response) => {
+   
       const { data = {} } = response;
       const { items = [] } = data;
       const [item = {}] = items;
