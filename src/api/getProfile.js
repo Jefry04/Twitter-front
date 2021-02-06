@@ -13,8 +13,8 @@ export function getProfile(username) {
 
       const { items = [] } = data;
       const [item = {}] = items;
-      const { name = '', username = '' } = item;
-      const profile = { name, username };
+      const { name = '', username = '', email = '' } = item;
+      const profile = { name, username, email };
 
       console.log(profile);
       return profile;
