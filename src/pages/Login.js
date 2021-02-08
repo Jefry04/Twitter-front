@@ -1,10 +1,10 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import API from '../api';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
-import UserContext from '../containers/UserContext';
+//import UserContext from '../containers/UserContext';
 import Alert from '@material-ui/lab/Alert';
 
 const useStyles = makeStyles((theme) => ({
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Login({ history }) {
   const [error, setError] = useState(false);
   const classes = useStyles();
-  const context = useContext(UserContext);
+  // const context = useContext(UserContext);
 
   async function submit(e) {
     e.preventDefault();
@@ -29,6 +29,10 @@ export default function Login({ history }) {
         username: username.value,
         password: password.value,
       });
+      // context.setUser({
+      //   username: username.value,
+      //   ...user,
+      // });
       setError(false);
       history.push('/');
     } catch (error) {

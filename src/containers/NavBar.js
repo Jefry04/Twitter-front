@@ -8,7 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ListItem from '@material-ui/core/ListItem';
 import { NavLink } from 'react-router-dom';
-import { UserConsumer } from './UserContext';
+//import { UserConsumer } from './UserContext';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ButtonAppBar() {
   const classes = useStyles();
+  const user = false;
 
   return (
     <div className={classes.root}>
@@ -43,33 +44,25 @@ export default function ButtonAppBar() {
               Twitter
             </Typography>
           </ListItem>
-          <UserConsumer>
-            {({ user }) => {
-              if (user) {
-                return (
-                  <>
-                    <ListItem component={NavLink} to="/">
-                      <Button className={classes.title}>{user.name}</Button>
-                    </ListItem>
-                    <ListItem component={NavLink} to="/signout">
-                      <Button className={classes.title}>SignOut</Button>
-                    </ListItem>
-                  </>
-                );
-              } else {
-                return (
-                  <>
-                    <ListItem component={NavLink} to="/CreateUsers">
-                      <Button className={classes.title}>Sign Up</Button>
-                    </ListItem>
-                    <ListItem component={NavLink} to="/login">
-                      <Button className={classes.title}>Login</Button>
-                    </ListItem>
-                  </>
-                );
-              }
-            }}
-          </UserConsumer>
+          {user ? (
+            <>
+              <ListItem component={NavLink} to="/profile">
+                <Button className={classes.title}>{user.name}</Button>
+              </ListItem>
+              <ListItem component={NavLink} to="/signout">
+                <Button className={classes.title}>SignOut</Button>
+              </ListItem>
+            </>
+          ) : (
+            <>
+              <ListItem component={NavLink} to="/CreateUsers">
+                <Button className={classes.title}>Sign Up</Button>
+              </ListItem>
+              <ListItem component={NavLink} to="/login">
+                <Button className={classes.title}>Login</Button>
+              </ListItem>
+            </>
+          )}
         </Toolbar>
       </AppBar>
     </div>
