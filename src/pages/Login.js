@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
-//import UserContext from '../containers/UserContext';
+import { connect } from 'react-redux';
 import Alert from '@material-ui/lab/Alert';
 
 const useStyles = makeStyles((theme) => ({
@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Login({ history }) {
+function Login({ history, setUser }) {
   const [error, setError] = useState(false);
   const classes = useStyles();
   // const context = useContext(UserContext);
@@ -29,10 +29,10 @@ export default function Login({ history }) {
         username: username.value,
         password: password.value,
       });
-      // context.setUser({
-      //   username: username.value,
-      //   ...user,
-      // });
+      setUser({
+        username: username.value,
+        ...user,
+      });
       setError(false);
       history.push('/');
     } catch (error) {
@@ -77,3 +77,16 @@ export default function Login({ history }) {
     </React.Fragment>
   );
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setUser: (payload) => {
+      dispatch({
+        type: 'SET_USER',
+        payload,
+      });
+    },
+  };
+};
+
+export default connect(undefined, mapDispatchToProps)(Login);

@@ -8,7 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ListItem from '@material-ui/core/ListItem';
 import { NavLink } from 'react-router-dom';
-//import { UserConsumer } from './UserContext';
+import { connect } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,9 +23,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ButtonAppBar() {
+function NavBar(props) {
   const classes = useStyles();
-  const user = false;
+  const { user } = props;
 
   return (
     <div className={classes.root}>
@@ -44,7 +44,7 @@ export default function ButtonAppBar() {
               Twitter
             </Typography>
           </ListItem>
-          {user ? (
+          {user.username ? (
             <>
               <ListItem component={NavLink} to="/profile">
                 <Button className={classes.title}>{user.name}</Button>
@@ -68,3 +68,11 @@ export default function ButtonAppBar() {
     </div>
   );
 }
+
+const mapStateToProps = (state) => {
+  return {
+    user: state.user,
+  };
+};
+
+export default connect(mapStateToProps)(NavBar);
