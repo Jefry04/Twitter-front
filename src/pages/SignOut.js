@@ -1,17 +1,28 @@
 import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-//import UserContext from '../containers/UserContext';
+import { connect } from 'react-redux';
 import * as Auth from '../utils/auth';
 
-export default function SignOut() {
-  //const context = useContext(UserContext);
+function SignOut({ unsetUser }) {
   const history = useHistory();
 
   useEffect(() => {
     Auth.clearToken();
-    // context.setUser(null);
+    unsetUser();
     history.push('/');
-  }, [history]);
+  }, [history, unsetUser]);
 
   return null;
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    unsetUser: () => {
+      dispatch({
+        type: 'UNSET_USER',
+      });
+    },
+  };
+};
+
+export default connect(undefined, mapDispatchToProps)(SignOut);

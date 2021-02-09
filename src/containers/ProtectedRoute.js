@@ -1,14 +1,14 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import * as Auth from '../utils/auth';
+import { connect } from 'react-redux';
 
-export default function ProtectedRoute({ path, component: Component }) {
-  const user = {};
+function ProtectedRoute({ path, component: Component, user }) {
   return (
     <Route
       path={path}
       render={(routeProps) => {
-        if (Auth.isAuthenticaded() && user) {
+        if (Auth.isAuthenticaded() && user.username) {
           return <Component {...routeProps} />;
         } else {
           return <Redirect to="/login" />;
@@ -17,3 +17,11 @@ export default function ProtectedRoute({ path, component: Component }) {
     />
   );
 }
+
+const mapStateToProps = (state) => {
+  return {
+    user: state.user,
+  };
+};
+
+export default connect(mapStateToProps)(ProtectedRoute);

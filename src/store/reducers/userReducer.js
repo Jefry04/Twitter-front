@@ -8,6 +8,16 @@ export function userReducer(state = initialState, action) {
         user: action.payload,
       };
     }
+    case 'UNSET_USER': {
+      return {
+        ...state,
+        user: {
+          username: '',
+          name: '',
+          email: '',
+        },
+      };
+    }
     default:
       return state;
   }
