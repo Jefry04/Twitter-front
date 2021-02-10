@@ -1,27 +1,23 @@
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Tweet from '../components/Tweet';
-import API from '../api';
+import { connect } from 'react-redux';
+import { fetchTweets } from '../store/reducers/tweets/actions';
+//import API from '../api';
 
-function TweetList() {
+function TweetList({ list, loadList }) {
   const history = useHistory();
   const [loading, setLoading] = useState(true);
-  const [list, setList] = useState([]);
-
-  async function loadList() {
-    try {
-      const data = await API.getTweets();
-      setList(data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  }
 
   useEffect(() => {
     loadList();
-  }, []);
+  }, [loadList]);
+
+  useEffect(() => {
+    if (list !== null) {
+      setLoading(false);
+    }
+  }, [list]);
 
   if (loading) {
     return <div>Loading ...</div>;
@@ -32,18 +28,18 @@ function TweetList() {
   }
 
   async function onLiked(e, id) {
-    try {
-      await API.likeTweet({ id });
-      // await loadList()
-      const tweet = await API.getTweet({ id });
-      const newList = list.map((item) => {
-        if (item.id === id) return tweet;
-        return item;
-      });
-      setList(newList);
-    } catch (error) {
-      console.error(error);
-    }
+    // try {
+    //   await API.likeTweet({ id });
+    //   // await loadList()
+    //   const tweet = await API.getTweet({ id });
+    //   const newList = list.map((item) => {
+    //     if (item.id === id) return tweet;
+    //     return item;
+    //   });
+    //   setList(newList);
+    // } catch (error) {
+    //   console.error(error);
+    // }
   }
 
   return (
@@ -63,4 +59,16 @@ function TweetList() {
   );
 }
 
-export default TweetList;
+const mapStateToProps = (state) => {
+  return {
+    list: state.tweets.items,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    loadList: () => dispatch(fetchTweets()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TweetList);
