@@ -1,10 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import API from '../api';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import UserContext from '../containers/UserContext';
+import Alert from '@material-ui/lab/Alert';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -16,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Login({ history }) {
+  const [error, setError] = useState(false);
   const classes = useStyles();
   const context = useContext(UserContext);
 
@@ -27,9 +29,10 @@ export default function Login({ history }) {
         username: username.value,
         password: password.value,
       });
-      context.setUser(user);
+      setError(false);
       history.push('/');
     } catch (error) {
+      setError(true);
       console.error(error);
     }
   }
@@ -44,6 +47,9 @@ export default function Login({ history }) {
       >
         Login
       </Typography>
+      {error && (
+        <Alert severity="warning">Incorrect username or password</Alert>
+      )}
       <form onSubmit={submit}>
         <TextField
           label="Username:"

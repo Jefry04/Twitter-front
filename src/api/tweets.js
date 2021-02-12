@@ -42,9 +42,37 @@ export function getTweet({ id }) {
 
 export function newTweet({ content = '' }) {
   return http.post(
-    'tweets',
+    '/tweets',
     {
       content,
+    },
+    {
+      headers: {
+        'x-access-token': Auth.getToken(),
+      },
+    }
+  );
+}
+
+export function likeTweet({ id }) {
+  return http.post(
+    '/tweets/likes',
+    {
+      id,
+    },
+    {
+      headers: {
+        'x-access-token': Auth.getToken(),
+      },
+    }
+  );
+}
+export function newComment({ comment, id }) {
+  return http.post(
+    '/tweets/comments',
+    {
+      id,
+      comment,
     },
     {
       headers: {

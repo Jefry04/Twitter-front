@@ -31,10 +31,33 @@ function TweetList() {
     history.push(`tweets/${id}`);
   }
 
+  async function onLiked(e, id) {
+    try {
+      await API.likeTweet({ id });
+      // await loadList()
+      const tweet = await API.getTweet({ id });
+      const newList = list.map((item) => {
+        if (item.id === id) return tweet;
+        return item;
+      });
+      setList(newList);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <div>
       {list.map((item) => {
-        return <Tweet key={item.id} onSelected={onSelected} {...item} />;
+        return (
+          <Tweet
+            key={item.id}
+            onSelected={onSelected}
+            onLiked={onLiked}
+            onComment={onSelected}
+            {...item}
+          />
+        );
       })}
     </div>
   );
