@@ -11,6 +11,7 @@ import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import Typography from '@material-ui/core/Typography';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { makeStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -86,3 +87,15 @@ export default function Tweet({
     </Card>
   );
 }
+
+Tweet.propTypes = {
+  id: PropTypes.string,
+  content: PropTypes.string,
+  date: PropTypes.string,
+  user: PropTypes.object,
+  likes: PropTypes.number,
+  comments: PropTypes.array,
+  onSelected: PropTypes.func,
+  onLiked: PropTypes.func,
+  onComment: PropTypes.func,
+};
